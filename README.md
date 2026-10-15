@@ -65,13 +65,13 @@ To run HeoFetch from any directory, place the executable in a directory included
 
 ## Why I built this
 
-HeoFetch started as a small project to practise Bash scripting on Arch Linux. While building it, I explored variables, command substitution, functions, conditionals, ANSI colours, command-line arguments, pipes, `awk`, and exit codes.
+heofetch started as a small project to practise Bash scripting on Arch Linux. While building it, I explored variables, command substitution, functions, conditionals, ANSI colours, command-line arguments, pipes, `awk`, and exit codes.
 
 This project is a work in progress, and I plan to improve it as I continue learning Linux and shell scripting.
 
 ## Author
 
-**Hari | heodoestech**
+**Sri Hari Haran T**
 
 - Instagram: [@heodoestech](https://www.instagram.com/heodoestech/)
 
