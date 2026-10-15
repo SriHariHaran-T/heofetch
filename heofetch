@@ -1,0 +1,45 @@
+#!/usr/bin/bash
+
+sourcecall(){
+source -p /etc os-release
+echo $PRETTY_NAME
+}
+
+RED="31"
+BLUE="34"
+BOLDRED="\033[1;${RED}m"
+ENDCOLOR="\033[0m"
+BOLDBLUE="\033[1;${BLUE}m"
+FAINTBLUE="\033[2;${BLUE}m"
+
+argument=$1
+
+if [[ $argument == --help ]]; then
+    echo -e "${BOLDBLUE}heofetch${ENDCOLOR}"	Show system information
+    echo -e "${BOLDBLUE}--help${ENDCOLOR}" 	Show help and stop
+    echo -e "${BOLDBLUE}--version${ENDCOLOR}"   Show version and stop
+    echo -e "${BOLDBLUE}--follow${ENDCOLOR}"	Follow me in Instagram!
+
+elif [[ $argument == --version ]]; then
+    echo -e "${BOLDBLUE}VERSION${ENDCOLOR}: 1.0 (INDEV)"
+
+elif [[ $argument == --follow ]]; then
+    echo -e "${BOLDBLUE}FOLLOW ME${ENDCOLOR}: \033]8;;http://instagram.com/heodoestech/\033\\\\${FAINTBLUE}Instagram${ENDCOLOR}\033]8;;\033\\\\"
+ 
+elif [[ -z "$argument" ]]; then    
+    CURRENT_USER=$(whoami)
+    OS=$(sourcecall)
+    MACH=$(uname -m)
+    KERNEL=$(uname -r)
+    UPTIME=$(uptime -p)
+    RAM=$(free -h | awk '/^Mem:/ {print $3"/"$2}')
+   #DISK=$(df -h | awk '/^\/dev\/sdb1/ {print $5}') Uncomment this if you want to see your boot disk usage.
+
+    echo -e "${BOLDBLUE}OS${ENDCOLOR}: $OS $MACH"
+    echo -e "${BOLDBLUE}KERNEL${ENDCOLOR}: $KERNEL"
+    echo -e "${BOLDBLUE}UPTIME${ENDCOLOR}: $UPTIME"
+    echo -e "${BOLDBLUE}RAM${ENDCOLOR}: $RAM"
+else
+   echo -e "${BOLDRED}GIVE A VALID ARGUMENT${ENDCOLOR}"
+   exit 1
+fi
