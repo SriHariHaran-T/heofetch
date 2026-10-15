@@ -2,7 +2,7 @@
 
 A lightweight Bash-based system information tool for Linux, built as my first shell scripting project.
 
-HeoFetch displays useful information about your system directly in the terminal, with custom colours and a few fun command-line options.
+heofetch displays useful information about your system directly in the terminal, with custom colours and a few fun command-line options.
 
 ## Features
 
@@ -18,7 +18,7 @@ HeoFetch displays useful information about your system directly in the terminal,
 
 ## Usage
 
-Run HeoFetch from your terminal:
+Run heofetch from your terminal:
 
 ```bash
 heofetch
@@ -61,7 +61,7 @@ Run it:
 ./heofetch
 ```
 
-To run HeoFetch from any directory, place the executable in a directory included in your `PATH`, such as `~/.local/bin`.
+To run heofetch from any directory, place the executable in a directory included in your `PATH`, such as `~/.local/bin`.
 
 ## Why I built this
 
