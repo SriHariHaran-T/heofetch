@@ -1,9 +1,23 @@
-#!/usr/bin/bash
-
-sourcecall(){
+#!/usr/bin/env bash
+os(){
 source -p /etc os-release
-echo $PRETTY_NAME
+echo "$PRETTY_NAME"
 }
+
+cpu(){
+source -p /proc cpuinfo
+grep -m 1 'model name' /proc/cpuinfo | cut -d: -f 2 | xargs
+}
+
+CURRENT_USER="$(whoami)"
+OS="$(os)"
+MACH="$(uname -m)"
+CPU="$(cpu)"
+CPUCORES="$(nproc)"
+KERNEL="$(uname -r)"
+UPTIME="$(uptime -p)"
+RAM="$(free -h | awk '/^Mem:/ {print $3"/"$2}')"
+#DISK="$(df -h | awk '/^\/dev\/sdb3/ {print "("$3"/"$4")"" "$5}')"
 
 RED="31"
 BLUE="34"
@@ -15,10 +29,11 @@ FAINTBLUE="\033[2;${BLUE}m"
 argument=$1
 
 if [[ $argument == --help ]]; then
-    echo -e "${BOLDBLUE}heofetch${ENDCOLOR}"	Show system information
-    echo -e "${BOLDBLUE}--help${ENDCOLOR}" 	Show help and stop
-    echo -e "${BOLDBLUE}--version${ENDCOLOR}"   Show version and stop
-    echo -e "${BOLDBLUE}--follow${ENDCOLOR}"	Follow me in Instagram!
+    echo -e "${BOLDBLUE}heofetch${ENDCOLOR}""   	"Show system information
+    echo -e "${BOLDBLUE}--help${ENDCOLOR}""   	"Show help and stop
+    echo -e "${BOLDBLUE}--version${ENDCOLOR}""   	"Show version and stop
+    echo -e "${BOLDBLUE}--json${ENDCOLOR}""   	"Show JSON format and stop
+    echo -e "${BOLDBLUE}--follow${ENDCOLOR}""   	"Follow me in Instagram!
 
 elif [[ $argument == --version ]]; then
     echo -e "${BOLDBLUE}VERSION${ENDCOLOR}: 1.0 (INDEV)"
@@ -27,19 +42,20 @@ elif [[ $argument == --follow ]]; then
     echo -e "${BOLDBLUE}FOLLOW ME${ENDCOLOR}: \033]8;;http://instagram.com/heodoestech/\033\\\\${FAINTBLUE}Instagram${ENDCOLOR}\033]8;;\033\\\\"
  
 elif [[ -z "$argument" ]]; then    
-    CURRENT_USER=$(whoami)
-    OS=$(sourcecall)
-    MACH=$(uname -m)
-    KERNEL=$(uname -r)
-    UPTIME=$(uptime -p)
-    RAM=$(free -h | awk '/^Mem:/ {print $3"/"$2}')
-   #DISK=$(df -h | awk '/^\/dev\/sdb1/ {print $5}') Uncomment this if you want to see your boot disk usage.
 
+    echo -e "${BOLDBLUE}USER${ENDCOLOR}: $CURRENT_USER"
     echo -e "${BOLDBLUE}OS${ENDCOLOR}: $OS $MACH"
     echo -e "${BOLDBLUE}KERNEL${ENDCOLOR}: $KERNEL"
+    echo -e "${BOLDBLUE}CPU${ENDCOLOR}: $CPU"
+    echo -e "${BOLDBLUE}CPU CORES${ENDCOLOR}: $CPUCORES"
     echo -e "${BOLDBLUE}UPTIME${ENDCOLOR}: $UPTIME"
     echo -e "${BOLDBLUE}RAM${ENDCOLOR}: $RAM"
+    #echo -e "${BOLDBLUE}DISK${ENDCOLOR}: $DISK"
+
+elif [[ $argument == --json ]]; then
+    printf '{\n"user": "%s", \n"os": "%s", \n"kernel": "%s", \n"cpu": "%s", \n"cpucores": %d, \n"uptime": "%s", \n"ram": "%s" \n}' "$CURRENT_USER" "$OS $MACH" "$KERNEL" "$CPU" "$CPUCORES" "$UPTIME" "$RAM"
+
 else
-   echo -e "${BOLDRED}GIVE A VALID ARGUMENT${ENDCOLOR}"
+   echo -e "${BOLDRED}GIVE A VALID ARGUMENT OR USE heofetch --help${ENDCOLOR}"
    exit 1
 fi
