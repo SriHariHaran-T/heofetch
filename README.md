@@ -13,6 +13,7 @@ heofetch displays useful information about your system directly in the terminal,
 - Displays used and total RAM
 - Custom terminal colours
 - Help and version options
+- JSON output option
 - Instagram link option
 - Handles invalid command-line arguments
 
@@ -30,7 +31,8 @@ heofetch
 | --- | --- |
 | `--help` | Display help information |
 | `--version` | Display the current version |
-| `--follow` | Display my Instagram link |
+| `--json` | Display JSON output |
+| `--follow` | Display my Instagram link | 
 
 Unsupported options display an error message.
 
@@ -38,14 +40,14 @@ Unsupported options display an error message.
 
 - Linux
 - Bash
-- Standard Linux utilities, including `uname`, `uptime`, `free`, and `awk`
+- Standard Linux utilities, including `uname`, `uptime`, `free`, `cut`, and `awk`
 
 ## Installation
 
 Clone this repository:
 
 ```bash
-git clone 
+git clone https://github.com/SriHariHaran-T/heofetch 
 cd heofetch
 ```
 
