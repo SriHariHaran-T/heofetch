@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 os(){
-source -p /etc os-release
+source /etc/os-release
 echo "$PRETTY_NAME"
 }
 
 cpu(){
-source -p /proc cpuinfo
 grep -m 1 'model name' /proc/cpuinfo | cut -d: -f 2 | xargs
+}
+
+gpu(){
+lspci | grep -Ei "VGA|3D|Display" | cut -d: -f3
 }
 
 CURRENT_USER="$(whoami)"
@@ -17,6 +20,7 @@ CPUCORES="$(nproc)"
 KERNEL="$(uname -r)"
 UPTIME="$(uptime -p)"
 RAM="$(free -h | awk '/^Mem:/ {print $3"/"$2}')"
+GPU="$(gpu)"
 #DISK="$(df -h | awk '/^\/dev\/sdb3/ {print "("$3"/"$4")"" "$5}')"
 
 RED="31"
@@ -47,13 +51,16 @@ elif [[ -z "$argument" ]]; then
     echo -e "${BOLDBLUE}OS${ENDCOLOR}: $OS $MACH"
     echo -e "${BOLDBLUE}KERNEL${ENDCOLOR}: $KERNEL"
     echo -e "${BOLDBLUE}CPU${ENDCOLOR}: $CPU"
+    echo -e "${BOLDBLUE}GPU${ENDCOLOR}: $GPU" 
     echo -e "${BOLDBLUE}CPU CORES${ENDCOLOR}: $CPUCORES"
     echo -e "${BOLDBLUE}UPTIME${ENDCOLOR}: $UPTIME"
     echo -e "${BOLDBLUE}RAM${ENDCOLOR}: $RAM"
     #echo -e "${BOLDBLUE}DISK${ENDCOLOR}: $DISK"
 
+
+
 elif [[ $argument == --json ]]; then
-    printf '{\n"user": "%s", \n"os": "%s", \n"kernel": "%s", \n"cpu": "%s", \n"cpucores": %d, \n"uptime": "%s", \n"ram": "%s" \n}' "$CURRENT_USER" "$OS $MACH" "$KERNEL" "$CPU" "$CPUCORES" "$UPTIME" "$RAM"
+    printf '{\n"user": "%s", \n"os": "%s", \n"kernel": "%s", \n"cpu": "%s", \n"gpu": "%s", \n"cpucores": %d, \n"uptime": "%s", \n"ram": "%s" \n}' "$CURRENT_USER" "$OS $MACH" "$KERNEL" "$CPU" "$GPU" "$CPUCORES" "$UPTIME" "$RAM"
 
 else
    echo -e "${BOLDRED}GIVE A VALID ARGUMENT OR USE heofetch --help${ENDCOLOR}"
