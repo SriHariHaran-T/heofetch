@@ -40,7 +40,7 @@ Unsupported options display an error message.
 
 - Linux
 - Bash
-- Standard Linux utilities, including `uname`, `uptime`, `free`, `cut`, and `awk`
+- Standard Linux utilities, including `uname`, `uptime`, `free`, `cut`, `pciutils` and `awk`
 
 ## Installation
 
