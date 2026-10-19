@@ -1,4 +1,6 @@
-# heofetch
+<p align=center><img width="420" height="210" alt="heofetch";" src="https://github.com/user-attachments/assets/1db585b3-61cf-4fb2-9af2-e6d39944689e" />
+
+# <p align=center>heofetch
 
 A lightweight Bash-based system information tool for Linux, built as my first shell scripting project.
 
