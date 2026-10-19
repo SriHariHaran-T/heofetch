@@ -67,6 +67,8 @@ Run it:
 
 To run heofetch from any directory, place the executable in a directory included in your `PATH`, such as `~/.local/bin`.
 
+**Note:** The logo implementation currently supports only Arch Linux. Support for additional Linux distributions will be added in the future!
+
 ## Why I built this
 
 heofetch started as a small project to practise Bash scripting on Arch Linux. While building it, I explored variables, command substitution, functions, conditionals, ANSI colours, command-line arguments, pipes, `awk`, and exit codes.

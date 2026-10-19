@@ -13,4 +13,6 @@ case "$LOGO" in
 	mapfile -t ARCH < "$dir/logos/ascii/archlinux-logo.txt"
 	printf '%s\n' "${ARCH[@]}"
 	;;
+
+
 esac
