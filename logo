@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+fetch_os_logo_name(){
+source /etc/os-release
+echo "$LOGO"
+}
+
+LOGO="$(fetch_os_logo_name)"
+dir="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+
+case "$LOGO" in
+    archlinux-logo)
+	mapfile -t ARCH < "$dir/logos/ascii/archlinux-logo.txt"
+	printf '%s\n' "${ARCH[@]}"
+	;;
+esac

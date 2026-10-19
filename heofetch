@@ -1,68 +1,63 @@
 #!/usr/bin/env bash
-os(){
-source /etc/os-release
-echo "$PRETTY_NAME"
+logo(){
+source ./logo
 }
 
-cpu(){
-grep -m 1 'model name' /proc/cpuinfo | cut -d: -f 2 | xargs
-}
+information(){
+source ./information
+} 
 
-gpu(){
-lspci | grep -Ei "VGA|3D|Display" | cut -d: -f3
-}
-
-CURRENT_USER="$(whoami)"
-OS="$(os)"
-MACH="$(uname -m)"
-CPU="$(cpu)"
-CPUCORES="$(nproc)"
-KERNEL="$(uname -r)"
-UPTIME="$(uptime -p)"
-RAM="$(free -h | awk '/^Mem:/ {print $3"/"$2}')"
-GPU="$(gpu)"
-#DISK="$(df -h | awk '/^\/dev\/sdb3/ {print "("$3"/"$4")"" "$5}')"
-
-RED="31"
-BLUE="34"
-BOLDRED="\033[1;${RED}m"
+RED_FC="31"
+BLUE_FC="34"
+WHITE_FC="37"
+WHITE="\033[0;${WHITE_FC}m"
+BOLDWHITE="\033[1;${WHITE_FC}m"
+BOLDRED="\033[1;${RED_FC}m"
 ENDCOLOR="\033[0m"
-BOLDBLUE="\033[1;${BLUE}m"
-FAINTBLUE="\033[2;${BLUE}m"
+BOLDBLUE="\033[1;${BLUE_FC}m"
+FAINTBLUE="\033[2;${BLUE_FC}m"
 
-argument=$1
+mapfile -t INFO < <(./information)
+mapfile -t LOGO < <(./logo)
 
-if [[ $argument == --help ]]; then
-    echo -e "${BOLDBLUE}heofetch${ENDCOLOR}""   	"Show system information
-    echo -e "${BOLDBLUE}--help${ENDCOLOR}""   	"Show help and stop
-    echo -e "${BOLDBLUE}--version${ENDCOLOR}""   	"Show version and stop
-    echo -e "${BOLDBLUE}--json${ENDCOLOR}""   	"Show JSON format and stop
-    echo -e "${BOLDBLUE}--follow${ENDCOLOR}""   	"Follow me in Instagram!
-
-elif [[ $argument == --version ]]; then
-    echo -e "${BOLDBLUE}VERSION${ENDCOLOR}: 1.0 (INDEV)"
-
-elif [[ $argument == --follow ]]; then
-    echo -e "${BOLDBLUE}FOLLOW ME${ENDCOLOR}: \033]8;;http://instagram.com/heodoestech/\033\\\\${FAINTBLUE}Instagram${ENDCOLOR}\033]8;;\033\\\\"
- 
-elif [[ -z "$argument" ]]; then    
-
-    echo -e "${BOLDBLUE}USER${ENDCOLOR}: $CURRENT_USER"
-    echo -e "${BOLDBLUE}OS${ENDCOLOR}: $OS $MACH"
-    echo -e "${BOLDBLUE}KERNEL${ENDCOLOR}: $KERNEL"
-    echo -e "${BOLDBLUE}CPU${ENDCOLOR}: $CPU"
-    echo -e "${BOLDBLUE}GPU${ENDCOLOR}: $GPU" 
-    echo -e "${BOLDBLUE}CPU CORES${ENDCOLOR}: $CPUCORES"
-    echo -e "${BOLDBLUE}UPTIME${ENDCOLOR}: $UPTIME"
-    echo -e "${BOLDBLUE}RAM${ENDCOLOR}: $RAM"
-    #echo -e "${BOLDBLUE}DISK${ENDCOLOR}: $DISK"
-
-
-
-elif [[ $argument == --json ]]; then
-    printf '{\n"user": "%s", \n"os": "%s", \n"kernel": "%s", \n"cpu": "%s", \n"gpu": "%s", \n"cpucores": %d, \n"uptime": "%s", \n"ram": "%s" \n}' "$CURRENT_USER" "$OS $MACH" "$KERNEL" "$CPU" "$GPU" "$CPUCORES" "$UPTIME" "$RAM"
+if [[ -z "$@" ]]; then
+    for i in "${!LOGO[@]}"; do
+	printf '%b %-30s %s\n' "$BOLDBLUE" "${LOGO[$i]}" "${INFO[$i]}"
+    done 
 
 else
-   echo -e "${BOLDRED}GIVE A VALID ARGUMENT OR USE heofetch --help${ENDCOLOR}"
-   exit 1
+    while [ "$#" -gt 0 ]; do
+    case "$1" in
+	-h | --help)
+	    echo -e "${BOLDBLUE}heofetch${ENDCOLOR}""   	"Show system information
+	    echo -e "${BOLDBLUE}--help${ENDCOLOR}""   	"Show help and stop
+	    echo -e "${BOLDBLUE}--version${ENDCOLOR}""   	"Show version and stop
+	    echo -e "${BOLDBLUE}--json${ENDCOLOR}""   	"Show JSON format and stop
+	    echo -e "${BOLDBLUE}--follow${ENDCOLOR}""   	"Follow me in Instagram!
+	    shift
+	    ;;
+	-v | --version)
+	    echo -e "${BOLDBLUE}VERSION${ENDCOLOR}: 1.0 (INDEV)"
+	    shift
+	    ;;
+	-f | --follow)
+	    echo -e "${BOLDBLUE}FOLLOW ME${ENDCOLOR}: \033]8;;http://instagram.com/heodoestech/\033\\\\${FAINTBLUE}Instagram${ENDCOLOR}\033]8;;\033\\\\"
+	    shift
+	    ;;
+	-j | --json)
+	    printf '%bSystem Information: \n' "$BOLDBLUE" 
+	    information
+	    printf '\n%bJSON Output: \n' "$BOLDBLUE"
+
+	    printf '%b\n{\n"user": "%s", \n"os": "%s", \n"kernel": "%s", \n"cpu": "%s", \n"gpu": "%s", \n"cpucores": %d, \n"uptime": "%s", \n"ram": "%s" \n}' "$WHITE" "$CURRENT_USER" "$OS $MACH" "$KERNEL" "$CPU" "$GPU" "$CPUCORES" "$UPTIME" "$RAM"
+	    shift
+	    ;;
+	*)
+	    echo "Unkown argument: $1 Use heofetch {--help} for more information"
+	    exit 1
+	    ;;
+	esac
+    done
 fi
+    
+

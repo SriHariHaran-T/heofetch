@@ -33,7 +33,7 @@ heofetch
 | --- | --- |
 | `--help` | Display help information |
 | `--version` | Display the current version |
-| `--json` | Display JSON output |
+| `--json` | Display JSON output along with System Information for verifications |
 | `--follow` | Display my Instagram link | 
 
 Unsupported options display an error message.
@@ -42,7 +42,7 @@ Unsupported options display an error message.
 
 - Linux
 - Bash
-- Standard Linux utilities, including `uname`, `uptime`, `free`, `cut`, `pciutils` and `awk`
+- Standard Linux utilities, including `uname`, `uptime`, `free`, `cut`, `pciutils`, `lshw`,  and `awk`
 
 ## Installation
 
